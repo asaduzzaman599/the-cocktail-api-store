@@ -1,5 +1,7 @@
-const loadAllData = (input = '')=>{
 
+    const cocktailContainer = document.getElementById('cocktail-container');
+const loadAllData = (input = '')=>{
+    console.log(input)
     const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${input}`;
     loadData(url,displayData)
 }
@@ -17,19 +19,18 @@ const loadData =async (url,callBack) =>{
 
 
 const displayData = (drinks) =>{
-    const cocktailContainer = document.getElementById('cocktail-container')
 
     const htmlDocument = drinks.map(drink => getHtmlDocument(drink));
     cocktailContainer.innerHTML = htmlDocument.join(' ');
 }
 
-const getHtmlDocument = ({strDrinkThumb,strAlcoholic,strInstructions,idDrink}) =>{
+const getHtmlDocument = ({strDrinkThumb,strIngredient2,strInstructions,idDrink}) =>{
     return `
     <div class="col">
                   <div class="card h-100">
                     <img src="${strDrinkThumb}" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title">${strAlcoholic}</h5>
+                      <h5 class="card-title">${strIngredient2}</h5>
                       <p class="card-text">${strInstructions}</p>
                     </div>
                     <div class="text-center">
@@ -40,6 +41,10 @@ const getHtmlDocument = ({strDrinkThumb,strAlcoholic,strInstructions,idDrink}) =
 }
 
 const loadCocktail = (id) =>{
+    document.getElementById('exampleModalLabel').innerText = ''
+    document.getElementById('modal-img').setAttribute('src', '');
+    document.getElementById('category').innerText= '';
+    document.getElementById('name').innerText = '';
     const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
     loadData(url,detailCocktail)
 }
@@ -54,3 +59,21 @@ const detailCocktail = (drink)=>{
 
 // intial call 
 loadAllData();
+
+const searchCocktail = () =>{
+    cocktailContainer.textContent=''
+    const input = document.getElementById('search-input');
+    const inputValue =input.value;
+
+    input.value='';
+
+    loadAllData(inputValue)
+
+
+}
+
+document.getElementById('search-input').addEventListener('keypress', (e)=>{
+    if(e.key === 'Enter'){
+        searchCocktail();
+    }
+})
